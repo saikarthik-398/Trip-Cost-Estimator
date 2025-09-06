@@ -1,0 +1,196 @@
+<html>
+<head>
+    <title>RideWise</title>
+    <style>
+        /* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #292929, #555);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* Header */
+header {
+    background: rgba(50, 50, 50, 0.8);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+}
+
+header .logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header h1 {
+    font-size: 26px;
+    color: #f8c3d9;
+}
+
+/* Navbar */
+nav {
+    display: flex;
+    gap: 15px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    transition: 0.3s;
+    font-size: 16px;
+}
+
+nav a:hover, nav a.active {
+    background: rgba(255, 105, 180, 0.4);
+    border-radius: 5px;
+}
+
+
+/* Main Content */
+main {
+    max-width: 850px;
+    margin: 80px auto;
+    padding: 30px;
+    background: rgba(50, 50, 50, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #f8c3d9;
+    border-radius: 5px;
+}
+
+.search-bar button {
+    padding: 10px;
+    background: #ff4081;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.search-bar button:hover {
+    background: #ff0055;
+}
+
+/* Activity Cards */
+.activities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.activity-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+    transition: 0.3s;
+}
+
+.activity-card h3 {
+    color: #f8c3d9;
+}
+
+.activity-card span {
+    font-size: 12px;
+    color: #bbb;
+}
+
+/* Floating CTA Button */
+.cta-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff4081, #8a8a8a);
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.cta-button:hover {
+    background: linear-gradient(135deg, #8a8a8a, #ff4081);
+}
+
+/* Footer */
+footer {
+    background: rgba(50, 50, 50, 0.8);
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 25px;
+}
+/* Logo Styling */
+header .logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header img {
+    width: 40px;
+    height: auto;
+}
+
+nav {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+nav a {
+    font-size: 14px;
+    padding: 6px 12px;
+}
+
+        </style>
+</head>
+<body>
+    <header>
+        <div class="logo-title">
+            <img src="static/R.png" alt="Logo"> 
+            <h2>RideWise</h2>
+        </div>
+        <nav> 
+            <a href="/dashboard">Home</a>
+            <a href="/check">Ride Cost Comparison</a>
+            <a href="/act">Activities</a>
+            <a href="/">Logout</a>
+
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Welcome to RideWise</h2>
+        <p>Compare ride costs from different services and choose the most affordable one.</p>
+        <section class="qr-code-section">
+            <h3>Do more in the app</h3>
+            <p>Download the RideWise app for the best ride experience.</p>
+            <img src="static/R (1).png" alt="Scan to Download RideWise App">
+            <p><a href="https://www.ridewise.com/" target="_blank">Download the RideWise App</a></p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 RideWise - All Rights Reserved</p>
+    </footer>
+</body>
+</html>

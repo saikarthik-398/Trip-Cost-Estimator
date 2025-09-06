@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride History</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #292929, #555);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: rgba(50, 50, 50, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+        }
+
+        header .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header img {
+            width: 40px;
+            height: auto;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #f8c3d9;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255, 105, 180, 0.4);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 25px;
+            background: rgba(50, 50, 50, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            color: #f8c3d9;
+            margin-bottom: 20px;
+        }
+
+        /* Ride History List */
+        .history-item {
+            background: rgba(255, 105, 180, 0.1);
+            border-left: 4px solid #ff4081;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(255, 105, 180, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .history-item:hover {
+            transform: scale(1.02);
+        }
+
+        .ride-info {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .ride-costs {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ride-costs li {
+            font-size: 14px;
+            background: rgba(255, 105, 180, 0.2);
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 90%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-title">
+            <img src="static/R.png" alt="Logo" width="40">
+            <h1>Ride History</h1>
+        </div>
+        <nav>
+            <a href="/dashboard">Home</a>
+            <a href="/check">Ride Cost</a>
+            <a href="/act">Activities</a>
+            <a href="/">Signup</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Ride Search History</h2>
+        <div id="historyList"></div>
+    </div>
+
+    <script>
+        async function fetchHistory() {
+            try {
+                const response = await fetch('/get_history');
+                const data = await response.json();
+                const historyList = document.getElementById('historyList');
+
+                if (data.history.length === 0) {
+                    historyList.innerHTML = "<p>No history available.</p>";
+                    return;
+                }
+
+                // Parse and display ride history in a structured format
+                historyList.innerHTML = data.history.map(entry => {
+                    // Extracting ride details
+                    const parts = entry.match(/\[(.*?)\] Start: (.*?), Destination: (.*?), Vehicle: (.*?), Costs: (.*)/);
+                    if (!parts) return ''; // Skip if format is wrong
+
+                    const timestamp = parts[1];
+                    const start = parts[2];
+                    const destination = parts[3];
+                    const vehicle = parts[4];
+                    const costs = JSON.parse(parts[5].replace(/'/g, '"')); // Convert to valid JSON
+
+                    return `
+                        <div class="history-item">
+                            <p class="ride-info"><strong>📅 Date & Time:</strong> ${timestamp}</p>
+                            <p class="ride-info"><strong>📍 From:</strong> ${start}</p>
+                            <p class="ride-info"><strong>📍 To:</strong> ${destination}</p>
+                            <p class="ride-info"><strong>🚗 Vehicle:</strong> ${vehicle.charAt(0).toUpperCase() + vehicle.slice(1)}</p>
+                            <p class="ride-info"><strong>💰 Ride Costs:</strong></p>
+                            <ul class="ride-costs">
+                                ${costs.map(cost => `<li><strong>${cost.provider}:</strong> ₹${cost.cost}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error("Failed to fetch history:", error);
+            }
+        }
+
+        window.onload = fetchHistory;
+    </script>
+</body>
+</html>

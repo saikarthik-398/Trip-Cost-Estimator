@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #292929, #555);
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ff3385; /* Match your pink color */
+    text-align: center;
+    padding: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+
+        .container {
+            width: 380px;
+            background: rgba(50, 50, 50, 0.8);
+            padding: 25px;
+
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(255, 105, 180, 0.3);
+            margin-top: 130px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tab {
+            width: 50%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .tab.active {
+            background: #ff4081;
+            color: white;
+        }
+
+        form {
+            display: none;
+            margin-top: 20px;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        form.active {
+            display: block;
+            opacity: 1;
+        }
+
+        input, button {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input {
+            background: #fff;
+            color: #000;
+            outline: none;
+        }
+
+        button {
+            background: #ff4081;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #ff0055;
+            transform: scale(1.05);
+        }
+
+        .captcha-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        #captcha-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff4081;
+            letter-spacing: 2px;
+        }
+
+        .refresh-btn {
+            background: transparent;
+            color: #ff4081;
+            border: 1px solid #ff4081;
+            padding: 6px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: #ff4081;
+            color: white;
+        }
+    </style>
+    <script>
+        function switchTab(tab) {
+            document.getElementById('signin-form').classList.remove('active');
+            document.getElementById('signup-form').classList.remove('active');
+            document.getElementById(tab).classList.add('active');
+
+            document.getElementById('signin-tab').classList.remove('active');
+            document.getElementById('signup-tab').classList.remove('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+        }
+
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captcha-text').textContent = captcha;
+        }
+
+        function validateCaptcha() {
+            const generatedCaptcha = document.getElementById('captcha-text').textContent;
+            const enteredCaptcha = document.getElementById('captcha-input').value;
+            if (enteredCaptcha !== generatedCaptcha) {
+                alert('CAPTCHA does not match!');
+                return false;
+            }
+            return true;
+        }
+
+        async function signUp(event) {
+            event.preventDefault();
+            if (!validateCaptcha()) return;
+
+            const fullname = document.getElementById('signup-fullname').value;
+            const email = document.getElementById('signup-email').value;
+            const phone = document.getElementById('signup-phone').value;
+            const password = document.getElementById('signup-password').value;
+
+            const response = await fetch('/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fullname, email, phone, password })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        }
+
+        async function signIn(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+
+            const response = await fetch('/signin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const result = await response.json();
+
+            if (result.redirect) {
+                window.location.href = result.redirect; // Redirects to dashboard
+            } else {
+                alert(result.message); // Show error message if login fails
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', generateCaptcha);
+    </script>
+</head>
+<body>
+    <div class="banner">Welcome To RideWise</div>
+
+    <div class="container">
+        <img src="static/R.png" alt="Logo" class="logo">
+        
+        <div class="tabs">
+            <div id="signin-tab" class="tab active" onclick="switchTab('signin-form')">Sign In</div>
+            <div id="signup-tab" class="tab" onclick="switchTab('signup-form')">Sign Up</div>
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="signin-form" class="active" onsubmit="signIn(event)">
+            <input type="email" id="signin-email" placeholder="Email" required>
+            <input type="password" id="signin-password" placeholder="Password" required>
+            <button type="submit">Sign In</button>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="signup-form" onsubmit="signUp(event)">
+            <input type="text" id="signup-fullname" placeholder="Full Name" required>
+            <input type="email" id="signup-email" placeholder="Email" required>
+            <input type="tel" id="signup-phone" placeholder="Phone Number" required>
+            <input type="password" id="signup-password" placeholder="Password" required>
+
+            <div class="captcha-box">
+                <span id="captcha-text"></span>
+                <button type="button" class="refresh-btn" onclick="generateCaptcha()">Refresh</button>
+            </div>
+            <input type="text" id="captcha-input" placeholder="Enter CAPTCHA" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>
