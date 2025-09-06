@@ -1,0 +1,2 @@
+[2025-03-16 23:20:21] Start: gitam u, Destination: di, Vehicle: car, Costs: [{'provider': 'Uber', 'cost': '183266.53'}, {'provider': 'Ola', 'cost': '202557.75'}, {'provider': 'Rapido', 'cost': '212203.35'}]
+[2025-03-16 23:21:13] Start: Vijayapura, India, Destination: Wesel, Germany, Vehicle: bike, Costs: [{'provider': 'Rapido', 'cost': '77467.66'}, {'provider': 'Ola', 'cost': '81771.42'}, {'provider': 'Uber', 'cost': '86075.18'}]
